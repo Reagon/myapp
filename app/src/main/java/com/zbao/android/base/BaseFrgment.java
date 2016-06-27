@@ -1,10 +1,10 @@
 package com.zbao.android.base;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,25 +17,33 @@ import com.zbao.android.utils.SystemStatusManager;
  * Created by zhangbao on 16/6/22.
  */
 public abstract class BaseFrgment extends Fragment {
-    public FragmentActivity mActivity;
+    public Context ct;
     /** Fragment当前状态是否可见 */
     protected boolean isVisible;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ct = getActivity();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mActivity = getActivity();
         setTranslucentStatus();
         View view = initView(inflater,container);
         return view;
     }
 
+
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getUserVisibleHint()){
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
             isVisible = true;
             onVisible();
-        }else{
+        }else {
             isVisible = false;
             onInvisible();
         }
@@ -78,4 +86,7 @@ public abstract class BaseFrgment extends Fragment {
             getActivity().getWindow().getDecorView().setFitsSystemWindows(true);
         }
     }
+
+
+
 }

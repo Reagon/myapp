@@ -43,20 +43,20 @@ public class MessageFragment extends BaseFrgment {
 
     @Override
     public void lazyLoad() {
-        T.showShort(mActivity,"MessageFragment lazyLoad");
+        T.showShort(ct,"MessageFragment lazyLoad");
     }
 
     @OnClick(R.id.text1)
     void clickText1(){
-        T.showShort(mActivity,"Text1");
+        T.showShort(ct,"Text1");
     }
     @OnClick(R.id.text2)
     void clickText2(){
-        T.showShort(mActivity,"Text2");
+        T.showShort(ct,"Text2");
     }
     @OnClick(R.id.text3)
     void clickText4(){
-        T.showShort(mActivity,"Text3");
+        T.showShort(ct,"Text3");
     }
 
 }

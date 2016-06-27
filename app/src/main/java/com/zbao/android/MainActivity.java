@@ -1,8 +1,6 @@
 package com.zbao.android;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,7 +9,6 @@ import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.zbao.android.base.BaseActivity;
 import com.zbao.android.contacts.ContactsFragment;
-import com.zbao.android.customview.NoScrollViewPager;
 import com.zbao.android.entity.TabEntity;
 import com.zbao.android.home.HomeFragment;
 import com.zbao.android.messages.MessageFragment;
@@ -24,13 +21,10 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.viewpager)
-    NoScrollViewPager mViewPager;
+
     @BindView(R.id.tl_3)
     CommonTabLayout mTl3;
 
-
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private String[] mTitles = {"首页", "消息", "联系人", "更多"};
     private int[] mIconUnselectIds = {
@@ -55,18 +49,13 @@ public class MainActivity extends BaseActivity {
         mFragments.add(ContactsFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());
 
-        mTl3.setTabData(mTabEntities);
-        mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setHorizontalFadingEdgeEnabled(false);
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mTl3.setTabData(mTabEntities, this, R.id.fl_change, mFragments);
 
 
         mTl3.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
-                mViewPager.setCurrentItem(position);
+
             }
 
             @Override
@@ -105,29 +94,5 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitles[position];
-        }
-    }
 }
