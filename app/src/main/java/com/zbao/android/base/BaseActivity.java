@@ -26,7 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initData();
 
     // 需要setContentView之前调用
-    private void setTranslucentStatus() {
+    public void setTranslucentStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // 透明状态栏
             getWindow().addFlags(

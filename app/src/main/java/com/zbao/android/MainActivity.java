@@ -11,7 +11,7 @@ import com.zbao.android.base.BaseActivity;
 import com.zbao.android.contacts.ContactsFragment;
 import com.zbao.android.entity.TabEntity;
 import com.zbao.android.home.HomeFragment;
-import com.zbao.android.messages.MessageFragment;
+import com.zbao.android.weixinhot.WXHotFragment;
 import com.zbao.android.more.MoreFragment;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity {
     CommonTabLayout mTl3;
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitles = {"首页", "消息", "联系人", "更多"};
+    private String[] mTitles = {"首页", "热门", "联系人", "更多"};
     private int[] mIconUnselectIds = {
             R.mipmap.tab_home_unselect, R.mipmap.tab_speech_unselect,
             R.mipmap.tab_contact_unselect, R.mipmap.tab_more_unselect};
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
         }
 
         mFragments.add(HomeFragment.newInstance());
-        mFragments.add(MessageFragment.newInstance());
+        mFragments.add(WXHotFragment.newInstance());
         mFragments.add(ContactsFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());
 

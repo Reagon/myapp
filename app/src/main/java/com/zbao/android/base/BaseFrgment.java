@@ -18,7 +18,9 @@ import com.zbao.android.utils.SystemStatusManager;
  */
 public abstract class BaseFrgment extends Fragment {
     public Context ct;
-    /** Fragment当前状态是否可见 */
+    /**
+     * Fragment当前状态是否可见
+     */
     protected boolean isVisible;
 
 
@@ -32,7 +34,7 @@ public abstract class BaseFrgment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setTranslucentStatus();
-        View view = initView(inflater,container);
+        View view = initView(inflater, container);
         return view;
     }
 
@@ -40,27 +42,28 @@ public abstract class BaseFrgment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             isVisible = true;
             onVisible();
-        }else {
+        } else {
             isVisible = false;
             onInvisible();
         }
     }
 
-    public abstract View initView(LayoutInflater inflater,ViewGroup container);
+    public abstract View initView(LayoutInflater inflater, ViewGroup container);
 
     /**
      * fragment可见时
      */
-    protected void onVisible(){
+    protected void onVisible() {
         lazyLoad();
     }
+
     /**
      * fragment不可见时
      */
-    protected void onInvisible(){
+    protected void onInvisible() {
 
     }
 
@@ -86,7 +89,6 @@ public abstract class BaseFrgment extends Fragment {
             getActivity().getWindow().getDecorView().setFitsSystemWindows(true);
         }
     }
-
 
 
 }
