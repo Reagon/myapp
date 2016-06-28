@@ -10,6 +10,7 @@ import com.zbao.android.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by zhangbao on 16/6/28.
@@ -34,6 +35,11 @@ public class WXHotDetail extends BaseActivity {
             }
         });
         title.setText("详情");
+    }
+
+    @OnClick(R.id.back)
+    void onBack(){
+        finish();
     }
 
     @Override

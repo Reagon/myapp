@@ -3,6 +3,7 @@ package com.zbao.android.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class HomeFragment extends BaseFrgment {
     TextView mText3;
     @BindView(R.id.title)
     TextView barTitle;
+    @BindView(R.id.back)
+    ImageView back;
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
@@ -38,6 +41,7 @@ public class HomeFragment extends BaseFrgment {
         View view = inflater.inflate(R.layout.fragment_contacts,container, false);
         ButterKnife.bind(this,view);
         barTitle.setText(R.string.homepage);
+        back.setVisibility(View.GONE);
         return view;
     }
 

@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zbao.android.R;
@@ -14,7 +15,9 @@ import com.zbao.android.customview.xrecyclerview.XRecyclerView;
 import com.zbao.android.entity.WeiXinHotInfo;
 import com.zbao.android.utils.API;
 import com.zbao.android.utils.L;
+import com.zbao.android.utils.T;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,13 +35,16 @@ public class WXHotFragment extends BaseFrgment {
     XRecyclerView mRecyclerView;
     @BindView(R.id.title)
     TextView barTitle;
+    @BindView(R.id.back)
+    ImageView back;
 
     private int pageNum = 1;
     private final int number = 15;
     private String keyWords = "";
     private WXHotAdapter mAdapter;
-
-
+    private List<WeiXinHotInfo.NewslistBean>  allDatas = new ArrayList<WeiXinHotInfo.NewslistBean>();
+    private boolean isRefresh = false;
+    private boolean isLoadMore = false;
     public static WXHotFragment newInstance() {
         WXHotFragment fragment = new WXHotFragment();
         return fragment;
@@ -49,6 +55,7 @@ public class WXHotFragment extends BaseFrgment {
         View view = inflater.inflate(R.layout.fragment_wxhot, container, false);
         ButterKnife.bind(this, view);
         barTitle.setText(R.string.hot);
+        back.setVisibility(View.GONE);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ct);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -75,12 +82,16 @@ public class WXHotFragment extends BaseFrgment {
             public void onRefresh() {
                 pageNum = 1;
                 keyWords = "头条";
+                isRefresh = true;
                 httpGet(pageNum, keyWords);
 
             }
             @Override
             public void onLoadMore() {
-
+                pageNum += 1;
+                keyWords = "头条";
+                isLoadMore = true;
+                httpGet(pageNum, keyWords);
             }
         });
 
@@ -109,23 +120,46 @@ public class WXHotFragment extends BaseFrgment {
                 L.e("isSuccessful~~~~~");
                 WeiXinHotInfo infos = response.body();
                 List<WeiXinHotInfo.NewslistBean> beans = infos.getNewslist();
-
-                setListAdapter(beans);
+                if (isRefresh){
+                    isRefresh = false;
+                    allDatas.clear();
+                    mRecyclerView.refreshComplete();
+                }else if (isLoadMore){
+                    isLoadMore = false;
+                    mRecyclerView.loadMoreComplete();
+                }
+                allDatas.addAll(beans);
+                setListAdapter(allDatas);
             }
         }
 
         @Override
         public void onFailure(Call<WeiXinHotInfo> call, Throwable t) {
             L.e("onFailure response" + t.getMessage());
+            if (isRefresh){
+                isRefresh = false;
+                mRecyclerView.refreshComplete();
+            }else if (isLoadMore){
+                isLoadMore = false;
+                pageNum -= 1;
+                mRecyclerView.loadMoreComplete();
+            }
+            T.showShort(ct,t.getLocalizedMessage());
         }
     };
 
     private void setListAdapter( List<WeiXinHotInfo.NewslistBean> beans) {
-        mAdapter = new WXHotAdapter(beans,ct);
-        mRecyclerView.setAdapter(mAdapter);
+        if (beans != null && beans.size() != 0){
+            if (mAdapter == null){
+                mAdapter = new WXHotAdapter(beans,ct);
+                mRecyclerView.setAdapter(mAdapter);
+            }else{
+                mAdapter.notifyViewUpdate(beans);
+            }
+        }
+
+
 //                mRecyclerView.setRefreshing(true);
-
-
         mAdapter.setOnItemClickListener(new WXHotAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object object) {

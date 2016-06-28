@@ -25,6 +25,11 @@ public class WXHotAdapter extends RecyclerView.Adapter<WXHotAdapter.ViewHolder>{
         this.datas = datas;
         this.mContext = mContext;
     }
+
+    public void notifyViewUpdate(List<WeiXinHotInfo.NewslistBean> datas){
+        this.datas = datas;
+        notifyDataSetChanged();
+    }
     //创建新View，被LayoutManager所调用
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {

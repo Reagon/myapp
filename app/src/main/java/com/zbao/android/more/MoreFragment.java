@@ -3,6 +3,7 @@ package com.zbao.android.more;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class MoreFragment extends BaseFrgment {
     TextView mText3;
     @BindView(R.id.title)
     TextView barTitle;
+    @BindView(R.id.back)
+    ImageView back;
     public static MoreFragment newInstance() {
         MoreFragment fragment = new MoreFragment();
         return fragment;
@@ -37,6 +40,7 @@ public class MoreFragment extends BaseFrgment {
         View view = inflater.inflate(R.layout.fragment_contacts,container,false);
         ButterKnife.bind(this,view);
         barTitle.setText(R.string.more);
+        back.setVisibility(View.GONE);
         return view;
     }
 
