@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zbao.android.R;
+import com.zbao.android.customview.MaterialRippleLayout;
 import com.zbao.android.entity.WeiXinHotInfo;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class WXHotAdapter extends RecyclerView.Adapter<WXHotAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_wx_hot,viewGroup,false);
-        view.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.root_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
@@ -43,17 +45,33 @@ public class WXHotAdapter extends RecyclerView.Adapter<WXHotAdapter.ViewHolder>{
                 }
             }
         });
-        return new ViewHolder(view);
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+//        return new ViewHolder(view);
+
+        return new ViewHolder(
+                MaterialRippleLayout.on(view)
+                        .rippleOverlay(true)
+                        .rippleAlpha(0.2f)
+                        .rippleColor(0xFF585858)
+                        .rippleHover(false)
+                        .create());
     }
     //将数据与界面进行绑定的操作
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         //将数据保存在itemView的Tag中，以便点击时进行获取
-        viewHolder.itemView.setTag(datas.get(position));
+        viewHolder.root_item.setTag(datas.get(position));
         viewHolder.date.setText(datas.get(position).getCtime());
         viewHolder.src.setText(datas.get(position).getDescription());
         viewHolder.title.setText(datas.get(position).getTitle());
         Glide.with(mContext).load(datas.get(position).getPicUrl()).centerCrop().into(viewHolder.image);
+
+
     }
     //获取数据的数量
     @Override
@@ -68,12 +86,14 @@ public class WXHotAdapter extends RecyclerView.Adapter<WXHotAdapter.ViewHolder>{
         public TextView src;
         public TextView title;
         public ImageView image;
+        public RelativeLayout root_item;
         public ViewHolder(View view){
             super(view);
             date = (TextView) view.findViewById(R.id.hot_date);
             image = (ImageView) view.findViewById(R.id.hot_image);
             src = (TextView) view.findViewById(R.id.hot_src);
             title = (TextView) view.findViewById(R.id.hot_title);
+            root_item = (RelativeLayout) view.findViewById(R.id.root_item);
         }
     }
 

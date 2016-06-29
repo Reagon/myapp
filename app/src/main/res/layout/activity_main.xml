@@ -27,11 +27,6 @@
         tl:tl_underline_gravity="TOP"
         tl:tl_underline_height="1dp"/>
 
-    <!--<com.zbao.android.customview.NoScrollViewPager-->
-        <!--android:id="@+id/viewpager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_above="@id/tl_3"/>-->
     <FrameLayout
         android:id="@+id/fl_change"
         android:layout_width="match_parent"

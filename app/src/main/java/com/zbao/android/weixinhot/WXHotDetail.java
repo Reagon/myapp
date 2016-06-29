@@ -25,6 +25,9 @@ public class WXHotDetail extends BaseActivity {
     protected void initView() {
         setContentView(R.layout.activity_hot_info_details);
         ButterKnife.bind(this);
+        mWebview.getSettings().setJavaScriptEnabled(true);
+        mWebview.getSettings().setDomStorageEnabled(true);
+
         mWebview.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

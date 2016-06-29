@@ -11,8 +11,8 @@ import com.zbao.android.base.BaseActivity;
 import com.zbao.android.contacts.ContactsFragment;
 import com.zbao.android.entity.TabEntity;
 import com.zbao.android.home.HomeFragment;
-import com.zbao.android.weixinhot.WXHotFragment;
 import com.zbao.android.more.MoreFragment;
+import com.zbao.android.weixinhot.NewsFragment;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
         }
 
         mFragments.add(HomeFragment.newInstance());
-        mFragments.add(WXHotFragment.newInstance());
+        mFragments.add(NewsFragment.newInstance());
         mFragments.add(ContactsFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());
 
@@ -92,6 +92,7 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 
 

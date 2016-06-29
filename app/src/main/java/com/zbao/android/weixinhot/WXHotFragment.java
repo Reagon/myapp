@@ -1,15 +1,16 @@
 package com.zbao.android.weixinhot;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.zbao.android.R;
-import com.zbao.android.base.BaseFrgment;
 import com.zbao.android.customview.xrecyclerview.ProgressStyle;
 import com.zbao.android.customview.xrecyclerview.XRecyclerView;
 import com.zbao.android.entity.WeiXinHotInfo;
@@ -29,15 +30,12 @@ import retrofit2.Response;
 /**
  * Created by zhangbao on 16/6/27.
  */
-public class WXHotFragment extends BaseFrgment {
+public class WXHotFragment extends Fragment {
 
     @BindView(R.id.recyclerview)
     XRecyclerView mRecyclerView;
-    @BindView(R.id.title)
-    TextView barTitle;
-    @BindView(R.id.back)
-    ImageView back;
 
+    private Context ct;
     private int pageNum = 1;
     private final int number = 15;
     private String keyWords = "";
@@ -45,17 +43,36 @@ public class WXHotFragment extends BaseFrgment {
     private List<WeiXinHotInfo.NewslistBean>  allDatas = new ArrayList<WeiXinHotInfo.NewslistBean>();
     private boolean isRefresh = false;
     private boolean isLoadMore = false;
-    public static WXHotFragment newInstance() {
+    private static String words = "";
+    private View mView;
+
+    public static WXHotFragment newInstance(String keyWords) {
         WXHotFragment fragment = new WXHotFragment();
+        Bundle args = new Bundle();
+        args.putString("key",keyWords);
+        fragment.setArguments(args);
+        words = keyWords;
         return fragment;
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ct = getActivity();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return initView(inflater, container);
+    }
+
     public View initView(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fragment_wxhot, container, false);
-        ButterKnife.bind(this, view);
-        barTitle.setText(R.string.hot);
-        back.setVisibility(View.GONE);
+        if (mView != null){
+            container.removeView(mView);
+        }
+        mView = inflater.inflate(R.layout.fragment_wxhot, container, false);
+        ButterKnife.bind(this, mView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ct);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -73,7 +90,7 @@ public class WXHotFragment extends BaseFrgment {
 
         initListener();
 
-        return view;
+        return mView;
     }
 
     private void initListener(){
@@ -81,7 +98,7 @@ public class WXHotFragment extends BaseFrgment {
             @Override
             public void onRefresh() {
                 pageNum = 1;
-                keyWords = "头条";
+                keyWords = words;
                 isRefresh = true;
                 httpGet(pageNum, keyWords);
 
@@ -89,7 +106,7 @@ public class WXHotFragment extends BaseFrgment {
             @Override
             public void onLoadMore() {
                 pageNum += 1;
-                keyWords = "头条";
+                keyWords = words;
                 isLoadMore = true;
                 httpGet(pageNum, keyWords);
             }
@@ -99,11 +116,19 @@ public class WXHotFragment extends BaseFrgment {
 
     }
 
-
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint()){
+            lazyLoad();
+        }else{
+
+        }
+    }
+
     public void lazyLoad() {
         pageNum = 1;
-        keyWords = "头条";
+        keyWords = words;
         httpGet(pageNum, keyWords);
     }
 
